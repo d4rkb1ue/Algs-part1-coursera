@@ -18,10 +18,14 @@ public class Percolation {
 	private int BOT;
 
 	private int N;
+	// count of all site, including top and bottom
 	private int COUNT;
 
 	public Percolation(int n) {
 
+		if (n<=0){
+			throw new IllegalArgumentException("n<=0");
+		}
 		N = n;
 		TOP = N * N;
 		BOT = TOP + 1;
@@ -41,6 +45,7 @@ public class Percolation {
 			union(i, TOP);
 			union(N * N - 1 - i, BOT);
 		}
+
 	}
 
 	private int root(int i) {
@@ -72,14 +77,27 @@ public class Percolation {
 		}
 	}
 
-	// if is already open, return false; else return true
-	public boolean open(int i, int j) {
+
+	public void open(int i, int j) {
+		// corner cases
+		int para[] = new int[2];
+		// start from 1,1
+		i--;
+		j--;
+		para[0] = i;
+		para[1] = j;
+		for (int k = 0; k < 2; k++) {
+			if (para[k] >= N || para[k] < 0)
+				throw new IndexOutOfBoundsException("Argument is outside its prescribed range");
+			}
+
 		int self = i * N + j;
-		if (is_open[self]) return false;
+		if (is_open[self]) return;
 		is_open[self] = true;
 
 		int NOT_EXIST = -1;
-		int x[] = new int[4]; // up, down, left,
+
+		int x[] = new int[4]; // up, down, left, right
 		x[0] = i > 0 ? ((i - 1) * N + j) : NOT_EXIST;
 		x[1] = i < N - 1 ? (i + 1) * N + j : NOT_EXIST;
 		x[2] = j > 0 ? i * N + j - 1 : NOT_EXIST;
@@ -90,13 +108,17 @@ public class Percolation {
 				union(x[k], self);
 			}
 		}
-		return true;
+		return;
 	}
 
 	public boolean isOpen(int i, int j) {
+		i--;
+		j--;
 		return is_open[i * N + j];
 	}
 	public boolean isFull(int i, int j) {
+		i--;
+		j--;
 		return is_connected(i * N + j, TOP);
 	}
 	public boolean percolates() {
