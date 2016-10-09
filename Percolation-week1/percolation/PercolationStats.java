@@ -3,6 +3,8 @@
 javac-algs4 percolation/*.java
 java-algs4 percolation/PercolationStats
 
+- Print is off now.
+
 */
 
 import edu.princeton.cs.algs4.StdRandom;
@@ -31,9 +33,9 @@ public class PercolationStats {
             datas[i] = (double)res / (n * n);
         }
 
-        StdOut.println("mean = " + mean());
-        StdOut.println("stddev = " + stddev());
-        StdOut.println("95% confidence interval = " + confidenceLo() + ", " + confidenceHi());
+        // StdOut.println("mean = " + mean());
+        // StdOut.println("stddev = " + stddev());
+        // StdOut.println("95% confidence interval = " + confidenceLo() + ", " + confidenceHi());
 
     }
     // sample mean of percolation threshold

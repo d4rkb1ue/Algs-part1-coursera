@@ -7,12 +7,19 @@
 数据结构：和课上所用的weighted-quick-union算法一致，采用PPT的写法，模拟出2个虚拟点，分别是top和bottom。isFull就是判断这个点是否 is_connected(self,top)
 */
 /**
-Version 5.1
-- solving backwash: instead of using a BOTTOM point connecting to all the last points in last row. just deciding whether percolate by testing any point in last row connected to TOP point.
+Version 5.2
+- unsolving backwash: (method-1) 
+instead of using a BOTTOM point connecting to all the last points in last row. just deciding whether percolate by testing any point in last row connected to TOP point.
 
 TODO:
-1. fix correction
-2. fix time consume
+---1. fix correction---
+---2. fix time consume: reuse BOT---
+
+因为使用 method-1 虽然解决了 backwash 问题，但导致每次 percolation() 调用都产生了 N 次 connected()。
+如果不使用 method-1, 每次只调用 1 次 connected()。
+
+其他解决办法：
+http://www.sigmainfy.com/blog/avoid-backwash-in-percolation.html
 
 **/
 
@@ -25,7 +32,7 @@ public class Percolation {
     private boolean[] is_open;
 
     private int TOP;
-    // private int BOT;
+    private int BOT;
 
     private int N;
     // count of all site, including top and bottom
@@ -40,9 +47,9 @@ public class Percolation {
 
         N = n;
         TOP = N * N;
-        // BOT = TOP + 1;
-        // COUNT = N * N + 2;
-        COUNT = N * N + 1;
+        BOT = TOP + 1;
+        COUNT = N * N + 2;
+        // COUNT = N * N + 1;
 
         uf = new WeightedQuickUnionUF(COUNT);
         is_open = new boolean[COUNT];
@@ -53,7 +60,7 @@ public class Percolation {
 
         for (int i = 0; i < N; i++) {
             uf.union(i, TOP);
-            // uf.union(N * N - 1 - i, BOT);
+            uf.union(N * N - 1 - i, BOT);
         }
 
     }
@@ -64,6 +71,7 @@ public class Percolation {
         i--;
         j--;
 
+        // corner case test
         int[] paras = {i, j};
         for (int para : paras) {
             if (para < 0 || para >= N) {
@@ -94,21 +102,38 @@ public class Percolation {
     public boolean isOpen(int i, int j) {
         i--;
         j--;
+        // corner case test
+        int[] paras = {i, j};
+        for (int para : paras) {
+            if (para < 0 || para >= N) {
+                throw new IndexOutOfBoundsException();
+            }
+        }
         return is_open[i * N + j];
     }
     public boolean isFull(int i, int j) {
         i--;
         j--;
+        // corner case test
+        int[] paras = {i, j};
+        for (int para : paras) {
+            if (para < 0 || para >= N) {
+                throw new IndexOutOfBoundsException();
+            }
+        }
+
         return is_open[i * N + j] && uf.connected(i * N + j, TOP);
     }
     public boolean percolates() {
-        for (int i = 0; i < N; i++) {
-            // is_open[N * N - 1 - i]: corner case N = 0
-            if (is_open[N * N - 1 - i] && uf.connected(TOP, N * N - 1 - i)) {
-                return true;
-            }
-        }
-        return false;
-        // return uf.connected(TOP, BOT);
+        // for (int i = 0; i < N; i++) {
+        //     // is_open[N * N - 1 - i]: corner case N = 0
+        //     if (is_open[N * N - 1 - i] && uf.connected(TOP, N * N - 1 - i)) {
+        //         return true;
+        //     }
+        // }
+        // return false;
+        if (N==1)
+            return is_open[0];
+        return uf.connected(TOP, BOT);
     }
 }
