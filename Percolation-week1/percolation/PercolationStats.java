@@ -80,8 +80,8 @@ public class PercolationStats {
     public static void main(String[] args) {
 
         int n = Integer.parseInt(args[0]);
-        int times = Integer.parseInt(args[1]);
+        int trials = Integer.parseInt(args[1]);
 
-        PercolationStats stat = new PercolationStats(n, times);
+        PercolationStats stat = new PercolationStats(n, trials);
     }
 }

@@ -1,6 +1,7 @@
 /**
-Version 5.0
-- using WeightedQuickUnionUF API from algs4
+Version 5.1
+- solving backwash: instead of using a BOTTOM point connecting to all the last points in last row. just deciding whether percolate by testing any point in last row connected to TOP point.
+
 
 问题：渗透问题。将一个不透水的均质方块分割为矩阵N*N，最上方为水源。随机打开矩阵中任意格子，重复此项操作多次，直到产生一条路径使水能穿过这个方块到达最下方。
 
@@ -20,10 +21,10 @@ public class Percolation {
     private boolean[] is_open;
 
     private int TOP;
-    private int BOT;
+    // private int BOT;
 
     private int N;
-// count of all site, including top and bottom
+    // count of all site, including top and bottom
     private int COUNT;
 
     public Percolation(int n) {
@@ -35,8 +36,9 @@ public class Percolation {
 
         N = n;
         TOP = N * N;
-        BOT = TOP + 1;
-        COUNT = N * N + 2;
+        // BOT = TOP + 1;
+        // COUNT = N * N + 2;
+        COUNT = N * N + 1;
 
         uf = new WeightedQuickUnionUF(COUNT);
         is_open = new boolean[COUNT];
@@ -47,18 +49,18 @@ public class Percolation {
 
         for (int i = 0; i < N; i++) {
             uf.union(i, TOP);
-            uf.union(N * N - 1 - i, BOT);
+            // uf.union(N * N - 1 - i, BOT);
         }
 
     }
 
+    /* do not need to deal corner cases by myself, cause API does Throws IndexOutOfBoundsException - unless both 0 <= p < n and 0 <= q < n
+    */
 
     public void open(int i, int j) {
-// start from 1,1
+        // start from 1,1
         i--;
         j--;
-
-// do not need to deal corner cases by myself, cause API does Throws IndexOutOfBoundsException - unless both 0 <= p < n and 0 <= q < n
 
         int self = i * N + j;
         if (is_open[self]) return;
@@ -88,9 +90,15 @@ public class Percolation {
     public boolean isFull(int i, int j) {
         i--;
         j--;
-        return uf.connected(i * N + j, TOP);
+        return is_open[i * N + j] && uf.connected(i * N + j, TOP);
     }
     public boolean percolates() {
-        return uf.connected(TOP, BOT);
+        for (int i = 0;i<N;i++){
+            if (uf.connected(TOP, N * N - 1 - i)){
+                return true;
+            }
+        }
+        return false;
+        // return uf.connected(TOP, BOT);
     }
 }
