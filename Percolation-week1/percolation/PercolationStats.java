@@ -1,29 +1,27 @@
-/**
+/*
 - How to run:
 javac-algs4 percolation/*.java
 java-algs4 percolation/PercolationStats
 
-**/
+*/
 
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 import edu.princeton.cs.algs4.StdOut;
 
 public class PercolationStats {
-    
-    private double mean_data, stddev_data, confidenceLo_data, confidenceHi_data;
+
+    private double mean_data, stddev_data;
     private double[] datas;
-    private int N;
     private int Trials;
 
     // perform trials independent experiments on an n-by-n grid
     public PercolationStats(int n, int trials) {
         if (n <= 0 || trials <= 0)
             throw new IllegalArgumentException(" n ≤ 0 or trials ≤ 0");
-        N = n;
         Trials = trials;
 
-        mean_data = stddev_data = confidenceLo_data = confidenceHi_data = -1;
+        mean_data = stddev_data = -1;
         datas = new double[trials];
         int res;
         Percolation percolation;
@@ -82,6 +80,6 @@ public class PercolationStats {
         int n = Integer.parseInt(args[0]);
         int trials = Integer.parseInt(args[1]);
 
-        PercolationStats stat = new PercolationStats(n, trials);
+        new PercolationStats(n, trials);
     }
 }

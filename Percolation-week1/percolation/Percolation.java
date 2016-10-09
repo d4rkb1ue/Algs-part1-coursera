@@ -1,14 +1,19 @@
-/**
-Version 5.2
-- unsolving backwash: instead of using a BOTTOM point connecting to all the last points in last row. just deciding whether percolate by testing any point in last row connected to TOP point.
-- sovle time consuming:
-
+/*
 问题：渗透问题。将一个不透水的均质方块分割为矩阵N*N，最上方为水源。随机打开矩阵中任意格子，重复此项操作多次，直到产生一条路径使水能穿过这个方块到达最下方。
 
 思路4：
 采用weighted-quick-union算法（with Path compression）。
 
 数据结构：和课上所用的weighted-quick-union算法一致，采用PPT的写法，模拟出2个虚拟点，分别是top和bottom。isFull就是判断这个点是否 is_connected(self,top)
+*/
+/**
+Version 5.1
+- solving backwash: instead of using a BOTTOM point connecting to all the last points in last row. just deciding whether percolate by testing any point in last row connected to TOP point.
+
+TODO:
+1. fix correction
+2. fix time consume
+
 **/
 
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
@@ -28,7 +33,7 @@ public class Percolation {
 
     public Percolation(int n) {
 
-// constructor only throws exception when n<0, while requirement need throw also n=0
+        // constructor only throws exception when n<0, while requirement need throw also n=0
         if (n <= 0) {
             throw new IllegalArgumentException("n<=0");
         }
@@ -53,13 +58,18 @@ public class Percolation {
 
     }
 
-    /* do not need to deal corner cases by myself, cause API does Throws IndexOutOfBoundsException - unless both 0 <= p < n and 0 <= q < n
-    */
 
     public void open(int i, int j) {
         // start from 1,1
         i--;
         j--;
+
+        int[] paras = {i, j};
+        for (int para : paras) {
+            if (para < 0 || para >= N) {
+                throw new IndexOutOfBoundsException();
+            }
+        }
 
         int self = i * N + j;
         if (is_open[self]) return;
@@ -92,8 +102,9 @@ public class Percolation {
         return is_open[i * N + j] && uf.connected(i * N + j, TOP);
     }
     public boolean percolates() {
-        for (int i = 0;i<N;i++){
-            if (uf.connected(TOP, N * N - 1 - i)){
+        for (int i = 0; i < N; i++) {
+            // is_open[N * N - 1 - i]: corner case N = 0
+            if (is_open[N * N - 1 - i] && uf.connected(TOP, N * N - 1 - i)) {
                 return true;
             }
         }
