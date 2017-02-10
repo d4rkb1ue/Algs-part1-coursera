@@ -128,7 +128,7 @@ public class Deque<Item> implements Iterable<Item> {
 	}
 
 	// for test
-	public void check(int shouldBeSize){
+	private void check(int shouldBeSize){
 		int count = 0;
 		Node pointer = first;
 		if (first == null && last != null || last == null && first != null){
