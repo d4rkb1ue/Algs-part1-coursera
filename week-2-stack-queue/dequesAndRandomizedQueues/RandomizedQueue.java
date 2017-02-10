@@ -11,6 +11,7 @@ import java.lang.UnsupportedOperationException;
 import java.lang.NullPointerException;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
+	// resized array has a average time of O(n)
 	private Item[] arr;
 	// pointer to first valid element + 1, arr[first-1] is the first element
 	// private int first;
@@ -73,10 +74,41 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 		if (isEmpty()) throw new NoSuchElementException("queue is empty");
 		return arr[StdRandom.uniform(n)];
 	}
+
+	private class RandomizedQueueIterator implements Iterator<Item>{
+		private Item[] aCopy;
+		// remain elements in the clone arr
+		// can not use aCopy.length, 'cause it is a final, which always same with the initial x from 'object[x]'
+		private int remain;
+		public RandomizedQueueIterator(){
+			remain = n;
+			aCopy = (Item[]) new Object[n];
+			for (int i = 0;i<n;i++){
+				aCopy[i] = arr[i];
+			}
+		}
+		public boolean hasNext(){
+			return remain > 0;
+		}
+		public void remove(){
+			throw new UnsupportedOperationException();
+		}
+		public Item next(){
+			if (!hasNext()){
+				throw new NoSuchElementException("Deque underflow");
+			}
+			int no = StdRandom.uniform(remain);
+			Item ret = aCopy[no];
+			aCopy[no] = aCopy[--remain];
+			return ret;
+		}
+
+	}
 	// return an independent iterator over items in random order 
 	public Iterator<Item> iterator(){
-		return null;
+		return new RandomizedQueueIterator();
 	}
+
 	// for test
 	private void checkSize(int shouldBeSize){
 		if (shouldBeSize != n) throw new NullPointerException("shouldBeSize != n");
@@ -107,7 +139,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 			if (item.equals("-")){
 				de = q.dequeue();
 				shouldBeSize--;
-				if (!removeFromQueue(de,shouldBeQueue)) throw new NullPointerException("WTF? remove a not exist element:" + de+"[line:"+step_count+"]");
 				if (de == null) throw new NullPointerException("dequeue is null");
 				// if (!inTheQueue(de,shouldBeQueue)) throw new NullPointerException("dequeue item is wrong:" + de+"[line:"+step_count+"]");
 			}else if(item.equals("#")){
@@ -122,5 +153,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 			q.checkSize(shouldBeSize);			
 		}// end while(read file)
 		StdOut.println("Element(s) remains should be " + shouldBeSize);
+		for (String s : q){
+			StdOut.println(s);
+		}
 	}// end test main()
+
 }// end RandomizedQueue
