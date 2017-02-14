@@ -1,13 +1,18 @@
 /**
-* It's a Shell Sort algorithm with increments: prime number
+* It's two Shell Sort algorithms with increments: prime number and 3x + 1
 * primehellsort can sort no more than 30000 integers
 * author : d4rkb1ue 
 * blog: drkbl.com
 **/
+import edu.princeton.cs.algs4.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class PrimeShellSort{
 
 	// all prime number below 10000
+	// https://primes.utm.edu/lists/small/10000.txt
 	private static final int[] primesAndOne = {
 		1,
 		2,    3,    5,    7,    11,   13,   17,   19,   23,   29, 
@@ -132,7 +137,7 @@ public class PrimeShellSort{
 		9643, 9649, 9661, 9677, 9679, 9689, 9697, 9719, 9721, 9733, 
 		9739, 9743, 9749, 9767, 9769, 9781, 9787, 9791, 9803, 9811, 
 		9817, 9829, 9833, 9839, 9851, 9857, 9859, 9871, 9883, 9887, 
-		9901, 9907, 9923, 9929, 9931, 9941, 9949, 9967, 9973
+		9901, 9907, 9923, 9929, 9931, 9941, 9949, 9967, 9973,10007
 	};
 
 	// shellsort with increment: prime number
@@ -143,6 +148,7 @@ public class PrimeShellSort{
 		if (n == 0) return;
 		// h-sort
 		int h = 1;
+		// at least a sub array has 3 items to sort
 		while (h < n / 3){
 			h = primesAndOne[++primeNo];
 		}
@@ -194,20 +200,85 @@ public class PrimeShellSort{
 	}
 
 	/**
-	* Compare to 3x+1 increment
-	*
+	* small test
 	**/
-	public static void main(String args[]) {
-		int[] sample = {5,2,4,1,3,2,5,7,6,0,9};
-		for (int kk : sample) System.out.print(kk + " ");
-		System.out.println();
-		// PrimeShellSort sort = new PrimeShellSort();
-		threeShellSort(sample);
-		for (int kk : sample) System.out.print(kk + " ");
-		System.out.println();
-		int[] sample2 = {5,2,4,1,3,2,5,7,6,0,9};
-		primeShellSort(sample2);
-		for (int kk : sample2) System.out.print(kk + " ");
-		System.out.println();
+	// public static void main(String args[]) {
+
+	// 	int[] sample = {5,2,4,1,3,2,5,7,6,0,9};
+	// 	for (int kk : sample) System.out.print(kk + " ");
+	// 	System.out.println();
+
+	// 	Stopwatch stopwatch = new Stopwatch();
+	// 	threeShellSort(sample);
+	// 	double time = stopwatch.elapsedTime();
+	// 	for (int kk : sample) System.out.print(kk + " ");
+	// 	System.out.println("in " + time);
+
+
+	// 	int[] sample2 = {5,2,4,1,3,2,5,7,6,0,9};
+	// 	primeShellSort(sample2);
+	// 	for (int kk : sample2) System.out.print(kk + " ");
+	// 	System.out.println();
+	// }
+
+	/**
+	 * for creating test file
+	 * lines: how many numbers
+	 */
+	private static void createInts(int lines){
+		StdOut.println(lines);
+		for (int i = 0; i < lines; i++){
+			StdOut.println(StdRandom.uniform(lines));		
+		}
 	}
+
+	/**
+	* big test
+	* args[0]:
+	*	1. empty: read StdIn and sort
+	*	2. number: create [number] lines of datas to StdOut and exit
+	**/
+	public static void main(String args[]){
+		if (args.length != 0){
+			int c = Integer.parseInt(args[0]);
+			createInts(c);
+			return;
+		}
+
+		// read first line to determine the size
+		int size = 0;
+		if (!StdIn.isEmpty()){
+			String s = StdIn.readString();
+			size = Integer.parseInt(s);
+		}
+		int arr[] = new int[size];
+		int count;
+		for (count = 0; count < size && !StdIn.isEmpty(); count++){
+			String s = StdIn.readString();
+			arr[count] = Integer.parseInt(s);
+		}
+		if (size != count){
+			StdOut.println("Error: declared size != read lines");
+		}
+		StdOut.println("size: " + size);
+		
+
+		int[] sample = arr.clone();
+
+		Stopwatch stopwatch = new Stopwatch();
+		threeShellSort(sample);
+		double time = stopwatch.elapsedTime();
+		// for (int kk : sample) System.out.print(kk + " ");
+		System.out.println("3x + 1 in " + time +"s");
+
+		sample = arr.clone();
+
+		stopwatch = new Stopwatch();
+		primeShellSort(sample);
+		time = stopwatch.elapsedTime();
+		// for (int kk : sample) System.out.print(kk + " ");
+		System.out.println("prime in " + time +"s");
+
+
+	}	
 }
