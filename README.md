@@ -5,7 +5,18 @@
 
 - [algs4.jar](http://algs4.cs.princeton.edu/code/index.php#stdlib)
 
+# Run
+
+```
+$ cd week-2-stack-queue/dequesAndRandomizedQueues/
+$ cp ../../algs4.jar algs4.jar
+$ javac -cp .:algs4.jar -Xlint:unchecked *.java
+$ java -cp .:algs4.jar Permutation 3 < permutation_input.txt
+```
+
+
 # Homeworks
 
 1. Percolation, Week 1
+2. DequesAndRandomizedQueues, Week 2
 
