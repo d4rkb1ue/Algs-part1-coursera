@@ -138,7 +138,7 @@ public class PrimeShellSort{
 	// shellsort with increment: prime number
 	public static void primeShellSort(int[] a){
 		// h = primesAndOne[primeNo]
-		private int primeNo = 0;
+		int primeNo = 0;
 		int n = a.length;
 		if (n == 0) return;
 		// h-sort
@@ -149,10 +149,11 @@ public class PrimeShellSort{
 
 		while (h > 0){
 			for (int i = h; i < n; i++){
-				for (int j = n; j >= h && less(a[j], a[j-h]); j -= h)
+				for (int j = i; j >= h && less(a[j], a[j-h]); j -= h)
 					exchange(a, j, j-h);
 			}// end for i
-			h = primesAndOne[--primeNo];
+			// h might be 1
+			h = primeNo > 0 ? primesAndOne[--primeNo] : 0;
 		}// end while
 	}
 
@@ -197,6 +198,16 @@ public class PrimeShellSort{
 	*
 	**/
 	public static void main(String args[]) {
-
+		int[] sample = {5,2,4,1,3,2,5,7,6,0,9};
+		for (int kk : sample) System.out.print(kk + " ");
+		System.out.println();
+		// PrimeShellSort sort = new PrimeShellSort();
+		threeShellSort(sample);
+		for (int kk : sample) System.out.print(kk + " ");
+		System.out.println();
+		int[] sample2 = {5,2,4,1,3,2,5,7,6,0,9};
+		primeShellSort(sample2);
+		for (int kk : sample2) System.out.print(kk + " ");
+		System.out.println();
 	}
 }

@@ -14,6 +14,7 @@ $ javac -cp .:algs4.jar -Xlint:unchecked *.java
 $ java -cp .:algs4.jar Permutation 3 < permutation_input.txt
 ```
 
+`-cp` = `-classpath`
 
 # Homeworks
 
