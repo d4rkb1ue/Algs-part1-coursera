@@ -36,6 +36,20 @@ public class MergeSort{
 		merge(a, aux, lo, mid, hi);
 	}
 	/**
+	* Buttom-up version of mergeSort
+	* remove the recursive
+	*
+	**/
+	public static void mergeSortWithoutRecursive(Comparable[] a){
+		int N = a.length;
+		Comparable[] aux = new Comparable[N];
+		for (int sz = 1; sz < N; sz *= 2){
+			for (int lo = 0; lo < N - sz; lo += sz*2)
+				merge(a, aux, lo, lo+sz-1, Math.min(lo+2*sz-1, N-1));
+		}// end for size
+	}
+
+	/**
 	* Merge two sub-arrays into one: aux[lo, mid] + aux[mid + 1, hi] -> arr[lo, hi]
 	* 
 	* Parameters:
@@ -71,7 +85,8 @@ public class MergeSort{
 	public static void main(String[] args){
 		// int[] will cause error, since int is not Comparable. Auto-boxing do not cover this case
 		Integer[] a = {4,2,52,3,5,1,2,23,9,20,0};
-		mergeSort(a);
+		// mergeSort(a);
+		mergeSortWithoutRecursive(a);
 		for (int i : a){
 			System.out.print(i + ", ");
 		}
