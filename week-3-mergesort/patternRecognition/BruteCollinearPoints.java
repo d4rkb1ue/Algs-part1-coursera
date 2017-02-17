@@ -114,6 +114,22 @@ public class BruteCollinearPoints {
 	public LineSegment[] segments(){
 		return segments;
 	}
+	/**
+	 * @param
+	 * @return
+	 */
+	private static boolean pointsHaveRepeated(Point[] points){
+		// n^2 for cycle check
+		// NlgN if use sort() and check
+		Arrays.sort(points);
+		for(int i = 0; i < points.length - 1; i++){
+			if (points[i].compareTo(points[i+1]) == 0)
+				return true;
+		}
+		return false;
+	}
+	
+
 
 	public static void main(String[] args) {
 
@@ -126,6 +142,8 @@ public class BruteCollinearPoints {
 			int y = in.readInt();
 			points[i] = new Point(x, y);
 		}
+
+		if(pointsHaveRepeated(points)) throw new java.lang.IllegalArgumentException("point repeat.");
 
     	// draw the points
 		StdDraw.enableDoubleBuffering();
