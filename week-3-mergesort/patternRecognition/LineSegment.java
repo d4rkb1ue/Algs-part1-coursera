@@ -19,8 +19,7 @@ public class LineSegment {
      *
      * @param  p one endpoint
      * @param  q the other endpoint
-     * @throws NullPointerException if either <tt>p</tt> or <tt>q</tt>
-     *         is <tt>null</tt>
+     * @throws NullPointerException if either p or q is null
      */
     public LineSegment(Point p, Point q) {
         if (p == null || q == null) {
@@ -30,21 +29,10 @@ public class LineSegment {
         this.q = q;
     }
 
-    
-    /**
-     * Draws this line segment to standard draw.
-     */
     public void draw() {
         p.drawTo(q);
     }
 
-    /**
-     * Returns a string representation of this line segment
-     * This method is provide for debugging;
-     * your program should not rely on the format of the string representation.
-     *
-     * @return a string representation of this line segment
-     */
     public String toString() {
         return p + " -> " + q;
     }
