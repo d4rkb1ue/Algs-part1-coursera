@@ -17,6 +17,7 @@ public class Point implements Comparable<Point> {
     private final int x;     // x-coordinate of this point
     private final int y;     // y-coordinate of this point
 
+    // x and y are each between 0 and 32,767.
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
