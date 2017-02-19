@@ -27,10 +27,11 @@ public class BruteCollinearPoints {
    	// finds all line segments containing 4 points
 	public BruteCollinearPoints(Point[] points){
 		if (points == null || points.length == 0) throw new java.lang.NullPointerException();
+		if(pointsHaveRepeated(points)) throw new java.lang.IllegalArgumentException("point repeat.");
+
 		int N = points.length;
 		if (N < 4) segments = new LineSegment[0];
 		this.points = points;
-		int count = 0;
 		
 		// max segments number: C(N)(4) = N! / 24*(N-4)!
 		// it shouble be resizable
@@ -107,7 +108,7 @@ public class BruteCollinearPoints {
 
    	// the number of line segments
 	public int numberOfSegments(){
-		return segments == null ? segments.length : 0;
+		return segments != null ? segments.length : 0;
 	}
 
    	// the line segments
@@ -143,7 +144,7 @@ public class BruteCollinearPoints {
 			points[i] = new Point(x, y);
 		}
 
-		if(pointsHaveRepeated(points)) throw new java.lang.IllegalArgumentException("point repeat.");
+		// if(pointsHaveRepeated(points)) throw new java.lang.IllegalArgumentException("point repeat.");
 
     	// draw the points
 		StdDraw.enableDoubleBuffering();

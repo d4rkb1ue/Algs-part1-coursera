@@ -43,14 +43,11 @@ public class Point implements Comparable<Point> {
      * @return the slope between this point and the specified point
      */
     public double slopeTo(Point that) {
-        // horizontal -> positive zero
-        if (this.y == that.y) return +0.0;
         if (this.x == that.x){
-            // equal -> NEGATIVE_INFINITY
-            if (this.y == that.y) return Double.NEGATIVE_INFINITY;
-            // vertical -> POSITIVE_INFINITY
-            else return Double.POSITIVE_INFINITY;
+            if (this.y != that.y) return Double.POSITIVE_INFINITY;
+            else return Double.NEGATIVE_INFINITY;
         }
+        if (this.y == that.y) return +0.0;
         return (double)(that.y - this.y) / (that.x - this.x);
     }
 
@@ -83,8 +80,11 @@ public class Point implements Comparable<Point> {
     private class BySlope implements Comparator<Point> {
         // this->x < this->y : -1
         public int compare(Point x, Point y){
-            double tmp = Point.this.slopeTo(x) - Point.this.slopeTo(y);
-            return tmp > 0.0 ? 1 : (tmp == 0.0 ? 0 : -1);
+            double thisx = Point.this.slopeTo(x);
+            double thisy = Point.this.slopeTo(y);
+            if (thisx == thisy) return 0;
+            if (thisx > thisy) return 1;
+            return -1;
         }
     }
 
@@ -93,6 +93,14 @@ public class Point implements Comparable<Point> {
      * Unit tests the Point data type.
      */
     public static void main(String[] args) {
+        // boolean eee = (Double.POSITIVE_INFINITY == Double.POSITIVE_INFINITY); // true
+        // boolean ee2 = (Double.POSITIVE_INFINITY > Double.NEGATIVE_INFINITY); // true
+
+        Point kk = new Point(80, 477);
+        Point mm = new Point(80, 17);
+        p(kk.slopeOrder().compare(mm, mm)+"");
+
+
         /** 
         * test draw
         **/
@@ -108,12 +116,12 @@ public class Point implements Comparable<Point> {
         /**
         * create data
         **/
-        int N = 100;
-        int SCALE = 100;
-        Point[] ps = new Point[N];
-        for (int i = 0; i < N; i++){
-            ps[i] = new Point(StdRandom.uniform(SCALE), StdRandom.uniform(SCALE));
-        }
+        // int N = 100;
+        // int SCALE = 100;
+        // Point[] ps = new Point[N];
+        // for (int i = 0; i < N; i++){
+        //     ps[i] = new Point(StdRandom.uniform(SCALE), StdRandom.uniform(SCALE));
+        // }
 
         /**
         * test slopeTo
@@ -135,9 +143,9 @@ public class Point implements Comparable<Point> {
         /**
         * test Comparator
         **/
-        Arrays.sort(ps, new Point(0, 0).slopeOrder());
-        for (Point p : ps)
-            p(p.toString());
+        // Arrays.sort(ps, new Point(0, 0).slopeOrder());
+        // for (Point p : ps)
+        //     p(p.toString());
 
     }
     private static void p(String s){
